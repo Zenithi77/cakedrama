@@ -5,6 +5,7 @@ import Image from "next/image";
 import { createClient } from "@/lib/supabase/client";
 import type { ProductCategory, ProductRow } from "@/lib/supabase/types";
 import ImageUploader from "@/components/admin/ImageUploader";
+import { formatMNT } from "@/lib/constants";
 
 const categories: { value: ProductCategory; label: string }[] = [
   { value: "castella", label: "Castella" },
@@ -22,6 +23,7 @@ const emptyForm = {
   category: "castella" as ProductCategory,
   name: "",
   images: [] as string[],
+  price: "",
   weight: "",
   packaging: "",
   storage: "",
@@ -76,6 +78,7 @@ export default function ProductsPanel() {
       category: p.category,
       name: p.name,
       images: p.images?.length ? p.images : [p.image],
+      price: p.price != null ? String(p.price) : "",
       weight: p.weight ?? "",
       packaging: p.packaging ?? "",
       storage: p.storage ?? "",
@@ -107,6 +110,7 @@ export default function ProductsPanel() {
       name: form.name,
       image: form.images[0],
       images: form.images,
+      price: form.price ? Number(form.price) : null,
       weight: form.weight || null,
       packaging: form.packaging || null,
       storage: form.storage || null,
@@ -224,6 +228,19 @@ export default function ProductsPanel() {
             </div>
             <div>
               <label className="font-label-sm text-label-sm text-secondary uppercase mb-2 block">
+                Үнэ (₮)
+              </label>
+              <input
+                type="number"
+                min="0"
+                value={form.price}
+                onChange={(e) => setForm({ ...form, price: e.target.value })}
+                placeholder="жишээ: 8500"
+                className="w-full border border-outline-variant bg-surface px-4 py-3"
+              />
+            </div>
+            <div>
+              <label className="font-label-sm text-label-sm text-secondary uppercase mb-2 block">
                 Жин
               </label>
               <input
@@ -323,6 +340,7 @@ export default function ProductsPanel() {
                   {categoryLabel(p.category)}
                 </p>
                 <p className="font-body-lg text-on-surface truncate">{p.name}</p>
+                <p className="font-body-md text-secondary text-sm">{formatMNT(p.price)}</p>
                 <p className="font-body-md text-on-surface-variant text-sm">Эрэмбэ: {p.sort_order}</p>
                 <div className="flex gap-3 mt-2">
                   <button

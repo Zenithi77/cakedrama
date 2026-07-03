@@ -1,4 +1,5 @@
 import Image from "next/image";
+import Link from "next/link";
 import ScrollReveal from "@/components/ScrollReveal";
 import Navbar from "@/components/Navbar";
 import Footer from "@/components/Footer";
@@ -6,32 +7,32 @@ import ContactForm from "@/components/ContactForm";
 import { getHeroImage, getPartners, getProducts, getSpecials } from "@/lib/data";
 import type { ProductRow } from "@/lib/supabase/types";
 import { partnerLogoSrc } from "@/lib/partnerLogo";
+import { formatMNT } from "@/lib/constants";
 
 function ProductCard({ product }: { product: ProductRow }) {
   return (
-    <div className="group bg-surface-container-low border border-transparent hover:border-on-primary-container/20 hover:translate-y-[-4px] transition-all duration-500 reveal">
+    <Link
+      href={`/products/${product.id}`}
+      className="group block bg-surface-container-low hover:translate-y-[-4px] transition-all duration-500 reveal"
+    >
       <div className="relative overflow-hidden aspect-square bg-surface-container-high">
         <Image
           src={product.image}
           alt={product.name}
           fill
-          sizes="(max-width: 768px) 100vw, 33vw"
+          sizes="(max-width: 640px) 50vw, (max-width: 768px) 100vw, 33vw"
           className="object-cover group-hover:scale-110 transition-transform duration-700"
         />
       </div>
-      <div className="p-6">
-        <h3 className="font-headline-md text-headline-md text-primary mb-4 leading-snug">
+      <div className="pt-3 sm:pt-4 text-center">
+        <h3 className="font-headline-md text-sm sm:text-lg text-primary leading-snug mb-1">
           {product.name}
         </h3>
-        <ul className="font-body-md text-on-surface-variant space-y-1 text-[15px]">
-          {product.weight && <li>1. Нэгж жин: {product.weight}</li>}
-          {product.packaging && <li>2. Савлагааны төрөл: {product.packaging}</li>}
-          {product.storage && <li>3. Хадгалах нөхцөл: {product.storage}</li>}
-          {product.shelf_life && <li>4. Хадгалах хугацаа: {product.shelf_life}</li>}
-          {product.thawing && <li>5. Гэсгээх заавар: {product.thawing}</li>}
-        </ul>
+        <p className="font-label-sm text-label-sm sm:text-sm text-secondary tracking-wide">
+          {formatMNT(product.price)}
+        </p>
       </div>
-    </div>
+    </Link>
   );
 }
 
@@ -66,31 +67,29 @@ export default async function Home() {
       <ScrollReveal />
       <Navbar />
 
-      {/* Hero Section */}
-      <section className="relative h-[820px] flex items-center justify-center overflow-hidden bg-on-background">
-        <div className="absolute inset-0 z-0">
-          <Image
-            src={heroImage}
-            alt="Cake Drama tiramisu"
-            fill
-            priority
-            sizes="100vw"
-            className="object-cover scale-105"
-          />
-          <div className="absolute inset-0 bg-on-background/60" />
-        </div>
+      {/* Hero Section — бүх дэлгэцэд ижил загвар, зургийн харьцаагаар (crop-гүй) */}
+      <section className="relative overflow-hidden bg-on-background aspect-[2034/1455] sm:aspect-[16/10] md:aspect-[21/9] flex items-center justify-center">
+        <Image
+          src={heroImage}
+          alt="Cake Drama tiramisu"
+          fill
+          priority
+          sizes="100vw"
+          className="object-cover"
+        />
+        <div className="absolute inset-0 bg-on-background/55" />
         <div
           id="hero-content"
           className="relative z-10 text-center max-w-4xl px-margin-mobile reveal"
         >
-          <span className="font-label-sm text-label-sm text-secondary-fixed tracking-[0.3em] mb-4 block">
+          <span className="font-label-sm text-label-sm text-secondary-fixed tracking-[0.3em] mb-2 sm:mb-4 block">
             SINCE 2000
           </span>
-          <h1 className="font-display-lg text-display-lg-mobile md:text-display-lg text-surface mb-6 leading-tight drop-shadow-md">
+          <h1 className="font-display-lg text-3xl sm:text-5xl md:text-display-lg text-surface mb-3 sm:mb-6 leading-tight drop-shadow-md">
             CAKE DRAMA
           </h1>
-          <div className="w-24 h-px bg-surface/60 mx-auto mb-8" />
-          <p className="font-body-lg text-body-lg text-surface/90 max-w-xl mx-auto italic">
+          <div className="w-16 sm:w-24 h-px bg-surface/60 mx-auto mb-4 sm:mb-8" />
+          <p className="font-body-lg text-sm sm:text-body-lg text-surface/90 max-w-xl mx-auto italic">
             Амтат мөчүүдийг урлана.
           </p>
         </div>
@@ -113,7 +112,7 @@ export default async function Home() {
         </div>
 
         <h3 className="font-headline-md text-headline-md text-primary mb-8">Castella цуврал</h3>
-        <div className="grid grid-cols-1 md:grid-cols-3 gap-8 mb-20">
+        <div className="grid grid-cols-2 md:grid-cols-3 gap-3 sm:gap-6 md:gap-8 mb-12 md:mb-20">
           {castellaProducts.map((p) => (
             <ProductCard key={p.id} product={p} />
           ))}
@@ -122,7 +121,7 @@ export default async function Home() {
         <h3 className="font-headline-md text-headline-md text-primary mb-8">
           Cheese Cake &amp; Chocolate Cake (5 порц)
         </h3>
-        <div className="grid grid-cols-1 md:grid-cols-3 gap-8 mb-20">
+        <div className="grid grid-cols-2 md:grid-cols-3 gap-3 sm:gap-6 md:gap-8 mb-12 md:mb-20">
           {bigCakes.map((p) => (
             <ProductCard key={p.id} product={p} />
           ))}
@@ -131,7 +130,7 @@ export default async function Home() {
         <h3 className="font-headline-md text-headline-md text-primary mb-8">
           Roll Cake &amp; Snacks
         </h3>
-        <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
+        <div className="grid grid-cols-2 md:grid-cols-3 gap-3 sm:gap-6 md:gap-8">
           {rollsAndSnacks.map((p) => (
             <ProductCard key={p.id} product={p} />
           ))}

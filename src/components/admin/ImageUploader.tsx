@@ -77,41 +77,44 @@ export default function ImageUploader({ images, onChange, max }: Props) {
     <div>
       <div className="grid grid-cols-3 sm:grid-cols-4 gap-3 mb-3">
         {images.map((url, i) => (
-          <div key={url + i} className="relative group aspect-square border border-outline-variant bg-surface-container-high overflow-hidden">
+          <div key={url + i} className="relative aspect-square border border-outline-variant bg-surface-container-high overflow-hidden">
             <Image src={url} alt={`Зураг ${i + 1}`} fill sizes="150px" className="object-cover" />
             {i === 0 && (
               <span className="absolute top-1 left-1 bg-primary text-on-primary text-[10px] px-2 py-0.5 uppercase tracking-wide">
                 Cover
               </span>
             )}
-            <div className="absolute inset-0 bg-black/50 opacity-0 group-hover:opacity-100 transition-opacity flex items-center justify-center gap-2">
-              <button
-                type="button"
-                onClick={() => move(i, -1)}
-                disabled={i === 0}
-                className="w-7 h-7 bg-white text-on-background text-xs disabled:opacity-30"
-                title="Зүүн тийш зөөх"
-              >
-                ←
-              </button>
-              <button
-                type="button"
-                onClick={() => handleRemove(i)}
-                className="w-7 h-7 bg-error text-on-error text-xs"
-                title="Устгах"
-              >
-                ✕
-              </button>
-              <button
-                type="button"
-                onClick={() => move(i, 1)}
-                disabled={i === images.length - 1}
-                className="w-7 h-7 bg-white text-on-background text-xs disabled:opacity-30"
-                title="Баруун тийш зөөх"
-              >
-                →
-              </button>
-            </div>
+            {/* Устгах товч — байнга харагдана (mobile дээр hover ажилладаггүй тул) */}
+            <button
+              type="button"
+              onClick={() => handleRemove(i)}
+              className="absolute top-1 right-1 w-6 h-6 flex items-center justify-center bg-error text-on-error text-xs shadow"
+              title="Устгах"
+            >
+              ✕
+            </button>
+            {images.length > 1 && (
+              <div className="absolute bottom-1 inset-x-1 flex justify-center gap-1.5">
+                <button
+                  type="button"
+                  onClick={() => move(i, -1)}
+                  disabled={i === 0}
+                  className="w-6 h-6 flex items-center justify-center bg-white/90 text-on-background text-xs disabled:opacity-30 shadow"
+                  title="Зүүн тийш зөөх"
+                >
+                  ←
+                </button>
+                <button
+                  type="button"
+                  onClick={() => move(i, 1)}
+                  disabled={i === images.length - 1}
+                  className="w-6 h-6 flex items-center justify-center bg-white/90 text-on-background text-xs disabled:opacity-30 shadow"
+                  title="Баруун тийш зөөх"
+                >
+                  →
+                </button>
+              </div>
+            )}
           </div>
         ))}
         {(!max || images.length < max) && (

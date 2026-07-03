@@ -12,6 +12,7 @@ export type ProductRow = {
   name: string;
   image: string;
   images: string[];
+  price: number | null;
   weight: string | null;
   packaging: string | null;
   storage: string | null;

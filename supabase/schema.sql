@@ -10,6 +10,7 @@ create table if not exists public.products (
   name text not null,
   image text not null,
   images text[] not null default '{}',
+  price integer,
   weight text,
   packaging text,
   storage text,

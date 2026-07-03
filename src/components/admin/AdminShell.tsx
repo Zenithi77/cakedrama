@@ -99,7 +99,7 @@ export default function AdminShell() {
       {/* Дэлгүүр рүү буцах — үргэлж харагдах floating товч */}
       <a
         href="/"
-        className="fixed bottom-5 left-5 z-50 flex items-center gap-2 bg-on-background text-surface pl-3 pr-5 py-3 shadow-lg hover:bg-primary transition-all duration-300"
+        className="fixed bottom-5 right-5 z-50 flex items-center gap-2 bg-on-background text-surface pl-3 pr-5 py-3 shadow-lg hover:bg-primary transition-all duration-300"
       >
         <span className="material-symbols-outlined text-xl">storefront</span>
         <span className="font-label-sm text-label-sm whitespace-nowrap">Дэлгүүр рүү буцах</span>

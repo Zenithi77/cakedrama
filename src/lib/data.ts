@@ -12,8 +12,17 @@ export async function getProducts(): Promise<ProductRow[]> {
   const { data, error } = await supabase.from("products").select("*").order("sort_order");
 
   if (error || !data || data.length === 0) return staticProducts;
-  // `images` багана 0002 migration ажиллуулаагүй хуучин DB дээр байхгүй байж болзошгүй тул нөөцлөнө.
-  return data.map((row) => ({ ...row, images: row.images?.length ? row.images : [row.image] }));
+  // `images`/`price` багана 0002/0005 migration ажиллуулаагүй хуучин DB дээр байхгүй байж болзошгүй тул нөөцлөнө.
+  return data.map((row) => ({
+    ...row,
+    images: row.images?.length ? row.images : [row.image],
+    price: row.price ?? null,
+  }));
+}
+
+export async function getProductById(id: string): Promise<ProductRow | null> {
+  const all = await getProducts();
+  return all.find((p) => p.id === id) ?? null;
 }
 
 export async function getSpecials(): Promise<SpecialRow[]> {

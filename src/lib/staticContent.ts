@@ -10,12 +10,13 @@ function id() {
 }
 
 function product(
-  partial: Omit<ProductRow, "id" | "created_at" | "sort_order" | "images">,
+  partial: Omit<ProductRow, "id" | "created_at" | "sort_order" | "images" | "price">,
   sort_order: number
 ): ProductRow {
   return {
     ...partial,
     images: [partial.image],
+    price: null,
     id: id(),
     created_at: new Date(0).toISOString(),
     sort_order,

@@ -68,6 +68,7 @@
   --font-display-lg-mobile: var(--font-playfair-display), serif;
   --font-headline-lg-mobile: var(--font-playfair-display), serif;
   --font-display-lg: var(--font-playfair-display), serif;
+  --font-handwriting: var(--font-script), cursive;
 
   --text-headline-md: 32px;
   --text-headline-md--line-height: 40px;

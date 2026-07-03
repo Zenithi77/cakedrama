@@ -30,15 +30,17 @@ export default function SiteSettingsPanel() {
     setError("");
     setSaved(false);
 
+    const nextImage = heroImage || DEFAULT_HERO_IMAGE;
     const { error } = await supabase
       .from("site_settings")
-      .upsert({ id: 1, hero_image: heroImage, updated_at: new Date().toISOString() });
+      .upsert({ id: 1, hero_image: nextImage, updated_at: new Date().toISOString() });
 
     setSaving(false);
     if (error) {
       setError(error.message);
       return;
     }
+    setHeroImage(nextImage);
     setSaved(true);
     setTimeout(() => setSaved(false), 3000);
   }
@@ -55,7 +57,16 @@ export default function SiteSettingsPanel() {
       ) : (
         <div className="border border-outline-variant p-6 bg-surface-container-low max-w-2xl">
           <div className="relative w-full aspect-video mb-6 bg-surface-container-high overflow-hidden">
-            <Image src={heroImage} alt="Hero banner" fill sizes="700px" className="object-cover" />
+            <Image
+              src={heroImage || DEFAULT_HERO_IMAGE}
+              alt="Hero banner"
+              fill
+              sizes="700px"
+              className="object-cover"
+            />
+            <span className="absolute top-2 left-2 bg-primary text-on-primary text-[10px] px-2 py-1 uppercase tracking-wide">
+              Одоогийн банер
+            </span>
           </div>
 
           <label className="font-label-sm text-label-sm text-secondary uppercase mb-2 block">
@@ -63,9 +74,14 @@ export default function SiteSettingsPanel() {
           </label>
           <ImageUploader
             images={heroImage ? [heroImage] : []}
-            onChange={(images) => setHeroImage(images[0] ?? DEFAULT_HERO_IMAGE)}
+            onChange={(images) => setHeroImage(images[0] ?? "")}
             max={1}
           />
+          {!heroImage && (
+            <p className="font-body-md text-error text-sm mt-1">
+              Зураггүй бол хадгалахад өгөгдмөл банер сэргэнэ.
+            </p>
+          )}
 
           {error && <p className="font-body-md text-error mt-4">{error}</p>}
           {saved && <p className="font-body-md text-secondary mt-4">Амжилттай хадгалагдлаа.</p>}
