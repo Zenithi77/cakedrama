@@ -9,8 +9,17 @@ function id() {
   return `static-${idCounter}`;
 }
 
-function product(partial: Omit<ProductRow, "id" | "created_at" | "sort_order">, sort_order: number): ProductRow {
-  return { ...partial, id: id(), created_at: new Date(0).toISOString(), sort_order };
+function product(
+  partial: Omit<ProductRow, "id" | "created_at" | "sort_order" | "images">,
+  sort_order: number
+): ProductRow {
+  return {
+    ...partial,
+    images: [partial.image],
+    id: id(),
+    created_at: new Date(0).toISOString(),
+    sort_order,
+  };
 }
 
 export const staticProducts: ProductRow[] = [

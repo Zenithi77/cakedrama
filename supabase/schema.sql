@@ -9,6 +9,7 @@ create table if not exists public.products (
   category text not null check (category in ('castella', 'big_cake', 'roll_snack', 'donut', 'mini_donut', 'fatcaron')),
   name text not null,
   image text not null,
+  images text[] not null default '{}',
   weight text,
   packaging text,
   storage text,

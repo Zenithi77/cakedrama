@@ -47,12 +47,45 @@ paste хийж **Run** дар. Энэ нь дараах хүснэгтүүдий
 дээрх бүх бүтээгдэхүүн, онцлох зүйл, түншийн жагсаалтыг DB-рүү хуулна (зургууд нь
 `public/images/...` замаараа хэвээр үлдэнэ, зөвхөн metadata л DB-д хадгалагдана).
 
-## 5. Admin хэрэглэгч үүсгэх
+## 5. Олон зурагтай бүтээгдэхүүн (migration)
+
+Хэрэв та `schema.sql`-ыг өмнө нь аль хэдийн ажиллуулсан бол дараах migration-ыг нэмж
+ажиллуулна (шинээр эхэлж байгаа бол шаардлагагүй, `schema.sql`-д аль хэдийн орсон):
+
+SQL Editor дотор `supabase/migrations/0002_product_images_array.sql` файлын агуулгыг paste
+хийж ажиллуул. Энэ нь `products.images text[]` багана нэмж, одоо байгаа `image`-г шинэ
+массивын эхний элемент болгож хуулна (өгөгдөл алдагдахгүй).
+
+## 6. Cloudinary тохируулах (зургийн сан)
+
+Admin панелаас байршуулсан бүх шинэ зураг (бүтээгдэхүүн, онцлох, түншийн лого) Cloudinary
+дээр хадгалагдана.
+
+1. https://cloudinary.com дээр акаунт үүсгэ (үнэгүй төлөвлөгөө хангалттай).
+2. Dashboard нүүр хуудасны **Product Environment Credentials** хэсгээс дараах утгуудыг ав:
+   - `Cloud name`
+   - `API Key`
+   - `API Secret`
+3. `.env.local` файлд бөглө:
+
+```
+NEXT_PUBLIC_CLOUDINARY_CLOUD_NAME=your-cloud-name
+CLOUDINARY_API_KEY=your-api-key
+CLOUDINARY_API_SECRET=your-api-secret
+CLOUDINARY_UPLOAD_FOLDER=cake-drama
+```
+
+Тусгай "unsigned upload preset" үүсгэх шаардлагагүй — байршуулалт нь сервер талд
+(`/api/admin/cloudinary-sign`) гарын үсэг зурагдсан (signed) байдлаар хийгддэг тул
+`API Secret`-ийг хэзээ ч клиент рүү дамжуулдаггүй, зөвхөн нэвтэрсэн admin хэрэглэгч
+байршуулах эрхтэй.
+
+## 7. Admin хэрэглэгч үүсгэх
 
 Supabase Dashboard → **Authentication → Users → Add user** дотроос admin-аар
 нэвтрэх и-мэйл/нууц үг үүсгэ (жишээ нь `temka1202@gmail.com`).
 
-## 6. Ажиллуулах
+## 8. Ажиллуулах
 
 ```bash
 npm run dev
@@ -61,19 +94,28 @@ npm run dev
 - Нүүр хуудас (`/`) — Supabase холбогдсон бол DB-ээс, холбогдоогүй бол статик
   өгөгдлөөс автоматаар уншина (`src/lib/data.ts` дотор энэ логик байгаа).
 - `/admin/login` — admin нэвтрэх хуудас.
-- `/admin` — бүтээгдэхүүн нэмэх/засах/устгах (CRUD) удирдлагын самбар.
+- `/admin` — мэргэжлийн CRUD dashboard: **Бүтээгдэхүүн** (олон зурагтай, ангилал сольж
+  болно, хайлт/шүүлтүүртэй), **Онцлох**, **Түншүүд**, **Зурвасууд** (contact form-оос ирсэн
+  захиалгууд) гэсэн tab-тай.
 - `/api/contact` — вэбсайтын "Захиалга илгээх" маягт энэ route руу POST хийж
   `contact_messages` хүснэгтэд бичнэ.
+- `/api/admin/cloudinary-sign`, `/api/admin/cloudinary-delete` — зөвхөн нэвтэрсэн admin-д
+  зориулсан Cloudinary upload/delete route-ууд.
 
 ## Архитектур товч
 
 ```
-src/lib/supabase/client.ts   — browser талын Supabase client (admin CRUD-д ашиглана)
-src/lib/supabase/server.ts   — server талын Supabase client (Server Component, API route-д)
-src/lib/supabase/types.ts    — Database TypeScript төрлүүд
-src/lib/data.ts              — getProducts/getSpecials/getPartners (DB эсвэл fallback)
-src/lib/staticContent.ts     — Supabase холбогдоогүй үеийн нөөц агуулга
-src/middleware.ts            — /admin замыг нэвтрээгүй хэрэглэгчээс хамгаална
-supabase/schema.sql          — хүснэгт + RLS policy
-supabase/seed.sql            — одоогийн агуулгыг DB рүү дүүргэх seed өгөгдөл
+src/lib/supabase/client.ts        — browser талын Supabase client (admin CRUD-д ашиглана)
+src/lib/supabase/server.ts        — server талын Supabase client (Server Component, API route-д)
+src/lib/supabase/types.ts         — Database TypeScript төрлүүд
+src/lib/data.ts                   — getProducts/getSpecials/getPartners (DB эсвэл fallback)
+src/lib/staticContent.ts          — Supabase холбогдоогүй үеийн нөөц агуулга
+src/lib/cloudinary.ts             — signed upload/delete логик (зөвхөн серверт)
+src/lib/cloudinaryUrl.ts          — Cloudinary URL-с public_id ялгах helper
+src/lib/partnerLogo.ts            — хуучин local лого болон шинэ Cloudinary URL хоёуланг дэмжинэ
+src/middleware.ts                 — /admin, /account замуудыг нэвтрээгүй хэрэглэгчээс хамгаална
+src/components/admin/             — AdminShell (sidebar tabs) + Products/Specials/Partners/MessagesPanel + ImageUploader
+supabase/schema.sql               — хүснэгт (images баганатай) + RLS policy
+supabase/seed.sql                 — одоогийн агуулгыг DB рүү дүүргэх seed өгөгдөл
+supabase/migrations/0002_*.sql    — хуучин DB-д images багана нэмэх migration
 ```

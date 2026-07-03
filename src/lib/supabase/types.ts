@@ -11,6 +11,7 @@ export type ProductRow = {
   category: ProductCategory;
   name: string;
   image: string;
+  images: string[];
   weight: string | null;
   packaging: string | null;
   storage: string | null;
@@ -47,6 +48,16 @@ export type ContactMessageRow = {
   created_at: string;
 };
 
+export type UserRole = "customer" | "admin";
+
+export type ProfileRow = {
+  id: string;
+  email: string | null;
+  full_name: string | null;
+  role: UserRole;
+  created_at: string;
+};
+
 export type Database = {
   public: {
     Tables: {
@@ -72,6 +83,12 @@ export type Database = {
         Row: ContactMessageRow;
         Insert: Partial<ContactMessageRow> & Pick<ContactMessageRow, "name" | "message">;
         Update: Partial<ContactMessageRow>;
+        Relationships: [];
+      };
+      profiles: {
+        Row: ProfileRow;
+        Insert: Partial<ProfileRow> & Pick<ProfileRow, "id">;
+        Update: Partial<ProfileRow>;
         Relationships: [];
       };
     };

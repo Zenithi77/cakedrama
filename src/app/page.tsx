@@ -1,16 +1,11 @@
 import Image from "next/image";
 import ScrollReveal from "@/components/ScrollReveal";
+import Navbar from "@/components/Navbar";
+import Footer from "@/components/Footer";
 import ContactForm from "@/components/ContactForm";
 import { getPartners, getProducts, getSpecials } from "@/lib/data";
 import type { ProductRow } from "@/lib/supabase/types";
-
-const navLinks = [
-  { label: "Танилцуулга", href: "#about" },
-  { label: "Бүтээгдэхүүн", href: "#products" },
-  { label: "Онцлох", href: "#specials" },
-  { label: "Түншүүд", href: "#partners" },
-  { label: "Холбоо барих", href: "#contact" },
-];
+import { partnerLogoSrc } from "@/lib/partnerLogo";
 
 function ProductCard({ product }: { product: ProductRow }) {
   return (
@@ -68,42 +63,13 @@ export default async function Home() {
   return (
     <>
       <ScrollReveal />
-      {/* Top Navigation */}
-      <nav className="w-full top-0 sticky bg-surface/90 backdrop-blur-sm z-50 border-b border-outline-variant/30">
-        <div className="flex justify-between items-center w-full px-margin-mobile md:px-margin-desktop max-w-container-max mx-auto h-20">
-          <div className="flex flex-col leading-none">
-            <span className="font-headline-md text-headline-md font-semibold text-primary">
-              Cake Drama
-            </span>
-            <span className="font-label-sm text-label-sm text-secondary tracking-widest">
-              SINCE 2000
-            </span>
-          </div>
-          <div className="hidden md:flex items-center gap-8">
-            {navLinks.map((link) => (
-              <a
-                key={link.label}
-                className="nav-underline relative font-label-sm text-label-sm text-on-surface-variant hover:text-primary transition-all duration-400"
-                href={link.href}
-              >
-                {link.label}
-              </a>
-            ))}
-          </div>
-          <a
-            href="#contact"
-            className="bg-primary text-on-primary px-8 py-3 font-label-sm text-label-sm hover:bg-on-background transition-all duration-400"
-          >
-            Захиалга өгөх
-          </a>
-        </div>
-      </nav>
+      <Navbar />
 
       {/* Hero Section */}
       <section className="relative h-[820px] flex items-center justify-center overflow-hidden bg-on-background">
         <div className="absolute inset-0 z-0">
           <Image
-            src="/images/hero_tiramisu.jpg"
+            src="https://res.cloudinary.com/zafglzry/image/upload/v1783020440/cake-drama/hero_tiramisu.jpg"
             alt="Cake Drama tiramisu"
             fill
             priority
@@ -126,73 +92,6 @@ export default async function Home() {
           <p className="font-body-lg text-body-lg text-surface/90 max-w-xl mx-auto italic">
             Амтат мөчүүдийг урлана.
           </p>
-        </div>
-      </section>
-
-      {/* About Section */}
-      <section
-        id="about"
-        className="py-section-gap px-margin-mobile md:px-margin-desktop max-w-container-max mx-auto overflow-hidden"
-      >
-        <div className="grid grid-cols-1 md:grid-cols-2 gap-20 items-center">
-          <div className="reveal order-2 md:order-1">
-            <span className="font-label-sm text-label-sm text-secondary uppercase tracking-[0.2em] mb-4 block">
-              Компанийн танилцуулга
-            </span>
-            <h2 className="font-headline-lg text-headline-lg-mobile md:text-headline-lg text-primary mb-8">
-              25 жилийн уламжлалт амт
-            </h2>
-            <div className="space-y-6 text-on-surface-variant font-body-lg leading-relaxed">
-              <p>
-                Cake Drama Co., Ltd. нь 2000 онд үүсэн байгуулагдаж 25 жилийн турш амт, чанар,
-                инновацийг төгс хослуулсан дээд зэрэглэлийн нарийн боов, амттаныг бүтээж ирсэн
-                Өмнөд Солонгосын тэргүүлэгч брэнд юм.
-              </p>
-              <p>
-                Cake Drama нь Солонгос улсын 50 гаруй томоохон кофе шоп, сүлжээ дэлгүүрүүдэд
-                бүтээгдэхүүнээ тогтмол нийлүүлж, дотоодын зах зээлд баттай байр суурь эзэлээд
-                зогсохгүй олон улсын зах зээлд ч итгэл хүлээсэн, үнэ цэнэтэй амттаны брэнд болон
-                амжилттай өргөжин тэлж байна.
-              </p>
-              <p>
-                Тус компани нь HACCP, FSSC 22000, ISO 22000 зэрэг олон улсын хүнсний аюулгүй
-                байдлын стандарт, гэрчилгээг бүрэн хангасан бөгөөд түүхий эдийн сонголтоос эхлэн
-                үйлдвэрлэл, сав баглаа боодол хүртэлх бүх шатанд хатуу чанарын хяналт хэрэгжүүлдэг.
-              </p>
-            </div>
-          </div>
-          <div className="relative reveal order-1 md:order-2">
-            <div className="absolute -top-4 -left-4 w-full h-full border border-outline-variant/30 z-0" />
-            <div className="relative z-10 aspect-4/5 bg-surface-container-high shadow-xl overflow-hidden">
-              <Image
-                src="/images/building.jpg"
-                alt="Cake Drama HQ building"
-                fill
-                sizes="(max-width: 768px) 100vw, 50vw"
-                className="object-cover"
-              />
-            </div>
-          </div>
-        </div>
-
-        <div className="mt-20 reveal">
-          <h3 className="font-headline-md text-headline-md text-primary mb-8 text-center">
-            Яагаад Cake Drama гэж?
-          </h3>
-          <div className="grid grid-cols-1 md:grid-cols-2 gap-6 max-w-3xl mx-auto">
-            {[
-              "25 жилийн туршлага, баталгаатай үйлдвэрлэл",
-              "Дэлхийн стандартад нийцсэн хүнсний аюулгүй байдал",
-              "Дээд зэрэглэлийн амт, зөөлөн бүтэц, тансаг мэдрэмж",
-              "Тасралтгүй судалгаа, инноваци, орчин үеийн технологи",
-              "Олон улсын зах зээлд бүрэн нийцсэн бүтээгдэхүүн",
-            ].map((item) => (
-              <div key={item} className="flex items-start gap-3">
-                <span className="material-symbols-outlined text-secondary shrink-0">check_circle</span>
-                <p className="font-body-md text-on-surface-variant italic">{item}</p>
-              </div>
-            ))}
-          </div>
         </div>
       </section>
 
@@ -331,7 +230,7 @@ export default async function Home() {
               className="relative aspect-3/2 border border-outline-variant/60 bg-white flex items-center justify-center p-2 hover:border-primary transition-colors duration-400"
             >
               <Image
-                src={`/images/partners/${p.logo}.png`}
+                src={partnerLogoSrc(p.logo)}
                 alt={p.name}
                 fill
                 sizes="150px"
@@ -401,19 +300,7 @@ export default async function Home() {
         </div>
       </section>
 
-      {/* Footer */}
-      <footer className="bg-surface-container-low w-full py-16 border-t border-outline-variant/30">
-        <div className="flex flex-col items-center justify-center gap-8 w-full px-margin-mobile md:px-margin-desktop max-w-container-max mx-auto text-center">
-          <div className="font-headline-md text-headline-md text-primary">Cake Drama</div>
-          <p className="font-label-sm text-label-sm text-secondary tracking-widest">
-            SINCE 2000 — АМТАТ МӨЧҮҮДИЙГ УРЛАНА
-          </p>
-          <div className="w-16 h-px bg-outline-variant" />
-          <p className="font-body-md text-body-md text-on-surface-variant italic opacity-80">
-            Лаят Энд Солт ХХК © 2024 Cake Drama.
-          </p>
-        </div>
-      </footer>
+      <Footer />
     </>
   );
 }

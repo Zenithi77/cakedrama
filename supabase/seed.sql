@@ -81,3 +81,6 @@ insert into public.partners (name, logo, sort_order) values
 ('Fodist', 'fodist', 39),
 ('Sushiro', 'sushiro', 40),
 ('Silla Myeongkwa', 'silla_myeongkwa', 41);
+
+-- images массив баганыг цорын ганц image-ээр дүүргэх (0002 migration-той хамт ажиллана)
+update public.products set images = array[image] where images = '{}';

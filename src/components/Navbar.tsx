@@ -1,0 +1,94 @@
+"use client";
+
+import { useState } from "react";
+import AuthNav from "@/components/AuthNav";
+
+const navLinks = [
+  { label: "Танилцуулга", href: "/about" },
+  { label: "Бүтээгдэхүүн", href: "/#products" },
+  { label: "Онцлох", href: "/#specials" },
+  { label: "Түншүүд", href: "/#partners" },
+  { label: "Холбоо барих", href: "/#contact" },
+];
+
+export default function Navbar() {
+  const [open, setOpen] = useState(false);
+
+  return (
+    <nav className="w-full top-0 sticky bg-surface/90 backdrop-blur-sm z-50 border-b border-outline-variant/30">
+      <div className="flex justify-between items-center w-full px-margin-mobile md:px-margin-desktop max-w-container-max mx-auto h-16 md:h-20">
+        <a href="/" className="flex flex-col leading-none" onClick={() => setOpen(false)}>
+          <span className="font-headline-md text-lg md:text-headline-md font-semibold text-primary">
+            Cake Drama
+          </span>
+          <span className="hidden sm:block font-label-sm text-label-sm text-secondary tracking-widest">
+            SINCE 2000
+          </span>
+        </a>
+
+        <div className="hidden md:flex items-center gap-8">
+          {navLinks.map((link) => (
+            <a
+              key={link.label}
+              className="nav-underline relative font-label-sm text-label-sm text-on-surface-variant hover:text-primary transition-all duration-400"
+              href={link.href}
+            >
+              {link.label}
+            </a>
+          ))}
+        </div>
+
+        <div className="hidden md:flex items-center gap-6">
+          <AuthNav />
+          <a
+            href="/#contact"
+            className="bg-primary text-on-primary px-8 py-3 font-label-sm text-label-sm hover:bg-on-background transition-all duration-400"
+          >
+            Захиалга өгөх
+          </a>
+        </div>
+
+        {/* Mobile hamburger */}
+        <button
+          type="button"
+          onClick={() => setOpen((v) => !v)}
+          aria-label={open ? "Цэсийг хаах" : "Цэсийг нээх"}
+          aria-expanded={open}
+          className="md:hidden flex items-center justify-center w-10 h-10 text-primary"
+        >
+          <span className="material-symbols-outlined text-3xl">{open ? "close" : "menu"}</span>
+        </button>
+      </div>
+
+      {/* Mobile menu panel */}
+      <div
+        className={`md:hidden overflow-hidden transition-[max-height] duration-300 ease-in-out border-t border-outline-variant/30 bg-surface ${
+          open ? "max-h-[28rem]" : "max-h-0 border-t-0"
+        }`}
+      >
+        <div className="px-margin-mobile py-4 flex flex-col gap-1">
+          {navLinks.map((link) => (
+            <a
+              key={link.label}
+              href={link.href}
+              onClick={() => setOpen(false)}
+              className="font-body-lg text-on-surface-variant hover:text-primary py-3 border-b border-outline-variant/20"
+            >
+              {link.label}
+            </a>
+          ))}
+          <div className="py-3 border-b border-outline-variant/20">
+            <AuthNav />
+          </div>
+          <a
+            href="/#contact"
+            onClick={() => setOpen(false)}
+            className="mt-4 text-center bg-primary text-on-primary px-8 py-3 font-label-sm text-label-sm hover:bg-on-background transition-all duration-400"
+          >
+            Захиалга өгөх
+          </a>
+        </div>
+      </div>
+    </nav>
+  );
+}
