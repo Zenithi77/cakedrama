@@ -3,7 +3,7 @@ import ScrollReveal from "@/components/ScrollReveal";
 import Navbar from "@/components/Navbar";
 import Footer from "@/components/Footer";
 import ContactForm from "@/components/ContactForm";
-import { getPartners, getProducts, getSpecials } from "@/lib/data";
+import { getHeroImage, getPartners, getProducts, getSpecials } from "@/lib/data";
 import type { ProductRow } from "@/lib/supabase/types";
 import { partnerLogoSrc } from "@/lib/partnerLogo";
 
@@ -47,10 +47,11 @@ function SimpleThumb({ image, name }: { image: string; name: string }) {
 }
 
 export default async function Home() {
-  const [products, specials, partners] = await Promise.all([
+  const [products, specials, partners, heroImage] = await Promise.all([
     getProducts(),
     getSpecials(),
     getPartners(),
+    getHeroImage(),
   ]);
 
   const castellaProducts = products.filter((p) => p.category === "castella");
@@ -69,7 +70,7 @@ export default async function Home() {
       <section className="relative h-[820px] flex items-center justify-center overflow-hidden bg-on-background">
         <div className="absolute inset-0 z-0">
           <Image
-            src="https://res.cloudinary.com/zafglzry/image/upload/v1783020440/cake-drama/hero_tiramisu.jpg"
+            src={heroImage}
             alt="Cake Drama tiramisu"
             fill
             priority

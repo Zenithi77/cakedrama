@@ -1,6 +1,9 @@
 import { createClient, isSupabaseConfigured } from "@/lib/supabase/server";
 import { staticPartners, staticProducts, staticSpecials } from "@/lib/staticContent";
 import type { PartnerRow, ProductRow, SpecialRow } from "@/lib/supabase/types";
+import { DEFAULT_HERO_IMAGE } from "@/lib/constants";
+
+export { DEFAULT_HERO_IMAGE };
 
 export async function getProducts(): Promise<ProductRow[]> {
   if (!isSupabaseConfigured()) return staticProducts;
@@ -31,4 +34,14 @@ export async function getPartners(): Promise<PartnerRow[]> {
 
   if (error || !data || data.length === 0) return staticPartners;
   return data;
+}
+
+export async function getHeroImage(): Promise<string> {
+  if (!isSupabaseConfigured()) return DEFAULT_HERO_IMAGE;
+
+  const supabase = await createClient();
+  const { data, error } = await supabase.from("site_settings").select("hero_image").eq("id", 1).maybeSingle();
+
+  if (error || !data?.hero_image) return DEFAULT_HERO_IMAGE;
+  return data.hero_image;
 }

@@ -58,6 +58,12 @@ export type ProfileRow = {
   created_at: string;
 };
 
+export type SiteSettingsRow = {
+  id: number;
+  hero_image: string;
+  updated_at: string;
+};
+
 export type Database = {
   public: {
     Tables: {
@@ -89,6 +95,12 @@ export type Database = {
         Row: ProfileRow;
         Insert: Partial<ProfileRow> & Pick<ProfileRow, "id">;
         Update: Partial<ProfileRow>;
+        Relationships: [];
+      };
+      site_settings: {
+        Row: SiteSettingsRow;
+        Insert: Partial<SiteSettingsRow>;
+        Update: Partial<SiteSettingsRow>;
         Relationships: [];
       };
     };

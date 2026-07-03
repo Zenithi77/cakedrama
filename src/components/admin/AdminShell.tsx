@@ -7,14 +7,16 @@ import ProductsPanel from "@/components/admin/ProductsPanel";
 import SpecialsPanel from "@/components/admin/SpecialsPanel";
 import PartnersPanel from "@/components/admin/PartnersPanel";
 import MessagesPanel from "@/components/admin/MessagesPanel";
+import SiteSettingsPanel from "@/components/admin/SiteSettingsPanel";
 
-type Tab = "products" | "specials" | "partners" | "messages";
+type Tab = "products" | "specials" | "partners" | "messages" | "settings";
 
 const tabs: { value: Tab; label: string; icon: string }[] = [
   { value: "products", label: "Бүтээгдэхүүн", icon: "cake" },
   { value: "specials", label: "Онцлох", icon: "star" },
   { value: "partners", label: "Түншүүд", icon: "handshake" },
   { value: "messages", label: "Зурвасууд", icon: "mail" },
+  { value: "settings", label: "Банер", icon: "image" },
 ];
 
 export default function AdminShell() {
@@ -90,6 +92,7 @@ export default function AdminShell() {
           {tab === "specials" && <SpecialsPanel />}
           {tab === "partners" && <PartnersPanel />}
           {tab === "messages" && <MessagesPanel />}
+          {tab === "settings" && <SiteSettingsPanel />}
         </div>
       </main>
 
