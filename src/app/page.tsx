@@ -100,7 +100,7 @@ export default async function Home() {
       {/* Products Section */}
       <section
         id="products"
-        className="py-section-gap px-margin-mobile md:px-margin-desktop max-w-container-max mx-auto"
+        className="py-10 md:py-section-gap px-margin-mobile md:px-margin-desktop max-w-container-max mx-auto"
       >
         <div className="text-center mb-16 reveal">
           <h2 className="font-headline-lg text-headline-lg-mobile md:text-headline-lg text-primary mb-4">

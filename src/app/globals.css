@@ -122,7 +122,13 @@ body {
   color: #ac8874;
   opacity: 0.4;
   font-size: 1.5rem;
-  margin: 2rem 0;
+  margin: 0.75rem 0;
+}
+
+@media (min-width: 768px) {
+  .fleur-de-lis::after {
+    margin: 2rem 0;
+  }
 }
 
 .nav-underline::after {
